@@ -33,12 +33,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("+1¿ø");
-            _coin++;
-            
-        }
+        
 
         coinText.text = _coin.ToString();
         DNAText.text = _DNA.ToString();
