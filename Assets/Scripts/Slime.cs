@@ -17,6 +17,12 @@ public class Slime : MonoBehaviour
     int touchCnt;
     public SpriteRenderer spr;
 
+    float startPosx;
+    float startPosY;
+    bool isBeingHeld = false;
+    public bool isInLine;
+    float timelinePosY;
+    GameObject fusionEntity;
 
     private void Start()
     {
@@ -62,7 +68,17 @@ public class Slime : MonoBehaviour
         }
 
 
-        
+        if (isBeingHeld)
+        {
+            Vector2 mousePos;
+            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            gameObject.transform.position = new Vector2(mousePos.x - startPosx, mousePos.y - startPosY);
+            if(fusionEntity != null)
+            {
+               
+            }
+        }
 
     }
 
@@ -94,6 +110,53 @@ public class Slime : MonoBehaviour
         touchCnt = 0;
         spr.color = new Color(1f, 1f, 1f);
         overload = false;
+    }
+
+    private void OnMouseDown()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+
+            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, .5f);
+            Vector3 mousePos;
+            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+
+            startPosx = mousePos.x - transform.position.x;
+            startPosY = mousePos.y - transform.position.y;
+
+
+            isBeingHeld = true;
+
+        }
+    }
+
+    private void OnMouseUp()
+    {
+        spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 1f);
+        isBeingHeld = false;
+
+        
+        
+        
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(isBeingHeld == true && collision.CompareTag("Slime"))
+        {
+            fusionEntity = collision.gameObject;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (isBeingHeld == true && collision.CompareTag("Slime"))
+        {
+            SpriteRenderer spriteRenderer = collision.GetComponent<SpriteRenderer>();
+            spriteRenderer.color = new Color(spr.color.r, spr.color.g, spr.color.b, 1f);
+            
+        }
     }
 
 
