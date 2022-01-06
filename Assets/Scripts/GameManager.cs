@@ -38,4 +38,6 @@ public class GameManager : MonoBehaviour
         coinText.text = _coin.ToString();
         DNAText.text = _DNA.ToString();
     }
+
+    
 }
