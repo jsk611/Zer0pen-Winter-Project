@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public Text coinText;
     public Text DNAText;
 
+    public GameObject shopUI;
+    public GameObject Slime;
     int _coin;
     public int coin
     {
@@ -39,5 +41,26 @@ public class GameManager : MonoBehaviour
         DNAText.text = _DNA.ToString();
     }
 
-    
+    public void shopTrigger()
+    {
+        //다른 UI 비활성화 후 상점 UI 활성화
+        if (shopUI.activeSelf == false)
+            shopUI.SetActive(true);
+        else
+        {
+            shopUI.SetActive(false);
+        }
+    }
+
+    public void SummonSlime()
+    {
+        GameObject s = Instantiate(Slime, new Vector2(0, Random.Range(-3.5f, 0f)), transform.rotation);
+        s.GetComponent<Slime>().gameManager = this;
+    }
+
+    public void UpgradeSlime()
+    {
+
+    }
+
 }

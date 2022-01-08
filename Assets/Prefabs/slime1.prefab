@@ -113,8 +113,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62c2b3b4242375f488d0e92ba688b891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slimeLevel: 0
+  sprites:
+  - {fileID: 21300000, guid: d43a4765a323525479fb25cb05673be1, type: 3}
+  - {fileID: 21300000, guid: d7cbb154bbce35942a539378a48c5171, type: 3}
+  - {fileID: 21300000, guid: 646ccf9b0ced2374992da82fd8d6aaeb, type: 3}
   gameManager: {fileID: 0}
   spr: {fileID: 5651141218598146456}
+  isBeingHeld: 0
+  isInLine: 0
+  fusionEntity: {fileID: 0}
 --- !u!50 &5651141218598146452
 Rigidbody2D:
   serializedVersion: 4

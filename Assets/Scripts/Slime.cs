@@ -5,6 +5,10 @@ using UnityEngine.EventSystems;
 
 public class Slime : MonoBehaviour
 {
+    public int slimeLevel;
+    [SerializeField]
+    Sprite[] sprites;
+
     bool input;
     Vector2 touchPosition;
     public GameManager gameManager;
@@ -13,20 +17,48 @@ public class Slime : MonoBehaviour
     int moveDir;
     float speed;
 
+    int maxTouchCnt = 10;
     bool overload;
     int touchCnt;
     public SpriteRenderer spr;
 
     float startPosx;
     float startPosY;
+    [SerializeField]
     bool isBeingHeld = false;
     public bool isInLine;
     float timelinePosY;
+    [SerializeField]
     GameObject fusionEntity;
 
+    float autoProduceTime = 2;
+    bool autoProduceDelay;
     private void Start()
     {
+        slimeLevel = 1;
         touchCnt = 0;
+    }
+
+    void SlimeShape(int level)
+    {
+        switch(level)
+        {
+            case 1:
+                spr.sprite = sprites[0];
+                maxTouchCnt = 10;
+                autoProduceTime = 2;
+                break;
+            case 2:
+                spr.sprite = sprites[1];
+                maxTouchCnt = 20;
+                autoProduceTime = 1;
+                break;
+            case 3:
+                spr.sprite = sprites[2];
+                maxTouchCnt = 30;
+                autoProduceTime = 0.5f;
+                break;
+        }
     }
     private void Update()
     {
@@ -51,11 +83,18 @@ public class Slime : MonoBehaviour
                 touchCnt++;
             }
         }
-        if(touchCnt >= 10 && !overload)
+        if(touchCnt >= maxTouchCnt && !overload)
         {
             overload = true;
             
             StartCoroutine(Delay());
+        }
+
+        //자동생산
+        if(!autoProduceDelay)
+        {
+            autoProduceDelay = true;
+            StartCoroutine(ProduceDelay());
         }
 
         //슬라임 움직임
@@ -74,12 +113,20 @@ public class Slime : MonoBehaviour
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             gameObject.transform.position = new Vector2(mousePos.x - startPosx, mousePos.y - startPosY);
-            if(fusionEntity != null)
-            {
-               
-            }
+            
         }
 
+        if (fusionEntity != null && fusionEntity.GetComponent<Slime>().slimeLevel == slimeLevel
+            && isBeingHeld == false)
+        {
+            //합체
+            Debug.Log("합체");
+            Destroy(fusionEntity);
+            slimeLevel += 1;
+            fusionEntity = null;
+        }
+
+        SlimeShape(slimeLevel);
     }
 
     private void FixedUpdate() 
@@ -110,6 +157,13 @@ public class Slime : MonoBehaviour
         touchCnt = 0;
         spr.color = new Color(1f, 1f, 1f);
         overload = false;
+    }
+
+    IEnumerator ProduceDelay()
+    {
+        gameManager.coin++;
+        yield return new WaitForSeconds(autoProduceTime);
+        autoProduceDelay = false;
     }
 
     private void OnMouseDown()
@@ -143,10 +197,13 @@ public class Slime : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(isBeingHeld == true && collision.CompareTag("Slime"))
+        if (isBeingHeld == true && collision.CompareTag("Slime"))
         {
             fusionEntity = collision.gameObject;
+            SpriteRenderer spriteRenderer = collision.GetComponent<SpriteRenderer>();
+            spriteRenderer.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.3f);
         }
+        
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -155,7 +212,7 @@ public class Slime : MonoBehaviour
         {
             SpriteRenderer spriteRenderer = collision.GetComponent<SpriteRenderer>();
             spriteRenderer.color = new Color(spr.color.r, spr.color.g, spr.color.b, 1f);
-            
+            fusionEntity = null;
         }
     }
 
