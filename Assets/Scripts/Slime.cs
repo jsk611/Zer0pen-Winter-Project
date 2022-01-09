@@ -17,15 +17,22 @@ public class Slime : MonoBehaviour
     int moveDir;
     float speed;
 
+    int earn;
     int maxTouchCnt = 10;
     bool overload;
     int touchCnt;
     public SpriteRenderer spr;
 
+    [SerializeField]
+    GameObject coin;
+    TextMesh coinT;
+
+    float t = 0;
     float startPosx;
     float startPosY;
     [SerializeField]
     bool isBeingHeld = false;
+    bool a;
     public bool isInLine;
     float timelinePosY;
     [SerializeField]
@@ -39,6 +46,8 @@ public class Slime : MonoBehaviour
         touchCnt = 0;
     }
 
+  
+
     void SlimeShape(int level)
     {
         switch(level)
@@ -46,22 +55,27 @@ public class Slime : MonoBehaviour
             case 1:
                 spr.sprite = sprites[0];
                 maxTouchCnt = 10;
-                autoProduceTime = 2;
+                earn = 1;
+                
+                //autoProduceTime = 2;
                 break;
             case 2:
                 spr.sprite = sprites[1];
                 maxTouchCnt = 20;
-                autoProduceTime = 1;
+                earn = 5;
+                //autoProduceTime = 1;
                 break;
             case 3:
                 spr.sprite = sprites[2];
                 maxTouchCnt = 30;
-                autoProduceTime = 0.5f;
+                earn = 10;
+                //autoProduceTime = 0.5f;
                 break;
         }
     }
     private void Update()
     {
+        
         //슬라임 터치 시 골드 증가
         if(Input.GetMouseButtonDown(0))
         {
@@ -78,8 +92,9 @@ public class Slime : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
             if(hit.collider != null && hit.collider.gameObject == gameObject)
             {
-                Debug.Log("+1원");
-                gameManager.coin++;
+                coinT = Instantiate(coin,new Vector2(transform.position.x, transform.position.y + 0.5f),Quaternion.identity).GetComponentInChildren<TextMesh>();
+                coinT.text = "+" + earn.ToString();
+                gameManager.coin += earn;
                 touchCnt++;
             }
         }
@@ -91,11 +106,11 @@ public class Slime : MonoBehaviour
         }
 
         //자동생산
-        if(!autoProduceDelay)
-        {
-            autoProduceDelay = true;
-            StartCoroutine(ProduceDelay());
-        }
+        //if(!autoProduceDelay)
+        //{
+        //    autoProduceDelay = true;
+        //    StartCoroutine(ProduceDelay());
+        //}
 
         //슬라임 움직임
         if(!stay) // 2.5초마다 슬라임 움직이는 방향 변경
@@ -106,6 +121,13 @@ public class Slime : MonoBehaviour
             StartCoroutine(ChangeMove());
         }
 
+        if (a)
+        {
+            t += Time.deltaTime;
+            if (t >= 1)
+                isBeingHeld = true;
+        }
+        
 
         if (isBeingHeld)
         {
@@ -170,7 +192,7 @@ public class Slime : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-
+            
             spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, .5f);
             Vector3 mousePos;
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -179,8 +201,9 @@ public class Slime : MonoBehaviour
             startPosx = mousePos.x - transform.position.x;
             startPosY = mousePos.y - transform.position.y;
 
-
-            isBeingHeld = true;
+            a = true;
+            //t = 0;
+            //isBeingHeld = true;
 
         }
     }
@@ -189,8 +212,8 @@ public class Slime : MonoBehaviour
     {
         spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 1f);
         isBeingHeld = false;
-
-        
+        a = false;
+        t = 0;
         
         
     }
