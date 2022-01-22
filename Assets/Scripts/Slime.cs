@@ -13,7 +13,6 @@ public class Slime : MonoBehaviour
     Vector2 touchPosition;
     public GameManager gameManager;
 
-    bool stay;
     int moveDir;
     float speed;
 
@@ -26,6 +25,9 @@ public class Slime : MonoBehaviour
     [SerializeField]
     GameObject coin;
     TextMesh coinT;
+    [SerializeField]
+    GameObject dna;
+    TextMesh dnaT;
 
     float t = 0;
     float startPosx;
@@ -38,12 +40,12 @@ public class Slime : MonoBehaviour
     [SerializeField]
     GameObject fusionEntity;
 
-    float autoProduceTime = 2;
-    bool autoProduceDelay;
     private void Start()
     {
         slimeLevel = 1;
         touchCnt = 0;
+        StartCoroutine(ProduceDelay());
+        StartCoroutine(ChangeMove());
     }
 
   
@@ -90,12 +92,22 @@ public class Slime : MonoBehaviour
             Vector2 pos = Camera.main.ScreenToWorldPoint(touchPosition);
             Ray2D ray = new Ray2D(pos, Vector2.zero);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-            if(hit.collider != null && hit.collider.gameObject == gameObject)
+            if(hit.collider != null && hit.collider.gameObject == gameObject) //슬라임을 클릭했을때
             {
-                coinT = Instantiate(coin,new Vector2(transform.position.x, transform.position.y + 0.5f),Quaternion.identity).GetComponentInChildren<TextMesh>();
-                coinT.text = "+" + earn.ToString();
-                gameManager.coin += earn;
-                touchCnt++;
+                int rn = Random.Range(1, 101);
+                if(rn == 1)
+                {
+                    //DNA 추가
+                    gameManager.DNA++;
+                    EarningEffect(1, 1);
+                }
+                else
+                {
+                    EarningEffect(0, earn);
+                    gameManager.coin += earn;
+                    touchCnt++;
+
+                }
             }
         }
         if(touchCnt >= maxTouchCnt && !overload)
@@ -105,21 +117,9 @@ public class Slime : MonoBehaviour
             StartCoroutine(Delay());
         }
 
-        //자동생산
-        //if(!autoProduceDelay)
-        //{
-        //    autoProduceDelay = true;
-        //    StartCoroutine(ProduceDelay());
-        //}
 
-        //슬라임 움직임
-        if(!stay) // 2.5초마다 슬라임 움직이는 방향 변경
-        {
-            stay = true;
-            moveDir = Random.Range(-1, 2);
-            speed = Random.Range(0.5f, 1.5f);
-            StartCoroutine(ChangeMove());
-        }
+
+        
 
         if (a)
         {
@@ -166,13 +166,20 @@ public class Slime : MonoBehaviour
         }
     }
 
-    IEnumerator ChangeMove() 
+    IEnumerator ChangeMove() //슬라임 움직임 변화
     {
-        yield return new WaitForSeconds(2.5f);
-        stay = false;
+        while(true)
+        {
+            moveDir = Random.Range(-1, 2);
+            speed = Random.Range(0.5f, 1.5f);
+            float m = Random.Range(1.5f, 3.5f);
+            yield return new WaitForSeconds(m);
+
+        }
+       
     }
 
-    IEnumerator Delay()
+    IEnumerator Delay() //슬라임 생산 과부하
     {
         spr.color = new Color(0.3f, 0.3f, 0.3f);
         yield return new WaitForSeconds(5);
@@ -181,12 +188,32 @@ public class Slime : MonoBehaviour
         overload = false;
     }
 
-    IEnumerator ProduceDelay()
+    IEnumerator ProduceDelay() // 자동 DNA 생산
     {
-        gameManager.coin++;
-        yield return new WaitForSeconds(autoProduceTime);
-        autoProduceDelay = false;
+        while(true)
+        {
+            yield return new WaitForSeconds(gameManager.autoProduceTime);
+            gameManager.DNA++;
+            EarningEffect(1, 1);
+        }
+        
     }
+
+    void EarningEffect(int type, int num)
+    {
+        if(type == 0)
+        {
+            coinT = Instantiate(coin, new Vector2(transform.position.x, transform.position.y + 0.5f), Quaternion.identity).GetComponentInChildren<TextMesh>(); // 골드 추가 효과
+            coinT.text = "+" + num.ToString();
+        }
+        else if(type == 1)
+        {
+            dnaT = Instantiate(dna, new Vector2(transform.position.x, transform.position.y + 0.5f), Quaternion.identity).GetComponentInChildren<TextMesh>(); // 골드 추가 효과
+            dnaT.text = "+" + num.ToString();
+        }
+    }
+
+
 
     private void OnMouseDown()
     {
@@ -239,5 +266,6 @@ public class Slime : MonoBehaviour
         }
     }
 
+    
 
 }
