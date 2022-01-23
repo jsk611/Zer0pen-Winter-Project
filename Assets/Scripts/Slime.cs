@@ -42,7 +42,7 @@ public class Slime : MonoBehaviour
 
     private void Start()
     {
-        slimeLevel = 1;
+        
         touchCnt = 0;
         StartCoroutine(ProduceDelay());
         StartCoroutine(ChangeMove());
