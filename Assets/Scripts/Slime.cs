@@ -124,7 +124,7 @@ public class Slime : MonoBehaviour
         if (a)
         {
             t += Time.deltaTime;
-            if (t >= 1)
+            if (t >= 0.5f)
                 isBeingHeld = true;
         }
         
@@ -147,6 +147,7 @@ public class Slime : MonoBehaviour
             slimeLevel += 1;
             fusionEntity = null;
         }
+        
 
         SlimeShape(slimeLevel);
     }
@@ -247,7 +248,7 @@ public class Slime : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (isBeingHeld == true && collision.CompareTag("Slime"))
+        if (isBeingHeld == true && collision.CompareTag("Slime") && collision.GetComponent<Slime>().slimeLevel == slimeLevel)
         {
             fusionEntity = collision.gameObject;
             SpriteRenderer spriteRenderer = collision.GetComponent<SpriteRenderer>();
@@ -258,7 +259,7 @@ public class Slime : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (isBeingHeld == true && collision.CompareTag("Slime"))
+        if (isBeingHeld == true && collision.CompareTag("Slime") && collision.GetComponent<Slime>().slimeLevel == slimeLevel)
         {
             SpriteRenderer spriteRenderer = collision.GetComponent<SpriteRenderer>();
             spriteRenderer.color = new Color(spr.color.r, spr.color.g, spr.color.b, 1f);

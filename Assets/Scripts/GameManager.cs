@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject Slime;
     public Text[] texts;
     public Image slimeBtnDelay;
+    public Text slimeAmountText;
     bool isDelay;
     int _coin;
 
@@ -85,6 +86,9 @@ public class GameManager : MonoBehaviour
             coin += 100000;
 
         }
+        int m = GameObject.FindGameObjectsWithTag("Slime").Length;
+        slimeAmountText.text = m.ToString() + "/" + maxSlime.ToString();
+        slimeAmountText.color = m == maxSlime ? Color.red : new Color(0.09f, 0.47f, 0);
     }
 
     public void shopTrigger()
@@ -135,17 +139,32 @@ public class GameManager : MonoBehaviour
                 slimeDivisionCost = 100;
                 break;
             case 2:
-                autoProduceTime = 40f;
+                autoProduceTime = 45f;
                 slimeDivisionCost = 1000;
                 break;
             case 3:
-                autoProduceTime = 30f;
+                autoProduceTime = 40f;
                 slimeDivisionCost = 10000;
+                break;
+            case 4:
+                autoProduceTime = 35f;
+                slimeDivisionCost = 20000;
+                break;
+            case 5:
+                autoProduceTime = 30f;
                 break;
 
         }
-        texts[0].text = "분열속도(Lv." + slimeDivisionNum.ToString() + ")";
-        texts[0].text += "\n" + slimeDivisionCost.ToString() + "코인";
+        if(slimeDivisionNum == 5)
+        {
+            texts[0].text = "분열속도(Lv.Max)";
+        }
+        else
+        {
+            texts[0].text = "분열속도(Lv." + slimeDivisionNum.ToString() + ")";
+            texts[0].text += "\n" + slimeDivisionCost.ToString() + "코인";
+
+        }
     }
     void SetSummonSpeed()
     {
@@ -169,12 +188,19 @@ public class GameManager : MonoBehaviour
                 break;
             case 5:
                 summonDelay = 3f;
-                summonSpeedCost = 0;
                 break;
 
         }
-        texts[1].text = "슬라임 생성속도(Lv." + summonSpeedNum.ToString() + ")";
-        texts[1].text += "\n" + summonSpeedCost.ToString() + "코인";
+        if(summonSpeedNum == 5)
+        {
+            texts[1].text = "슬라임 생성속도(Lv.Max)";
+        }
+        else
+        {
+            texts[1].text = "슬라임 생성속도(Lv." + summonSpeedNum.ToString() + ")";
+            texts[1].text += "\n" + summonSpeedCost.ToString() + "코인";
+
+        }
     }
     void SetMaxSlime()
     {
@@ -195,7 +221,7 @@ public class GameManager : MonoBehaviour
 
     public void UpgradeSlimeDivision()
     {
-        if(coin >= slimeDivisionCost)
+        if(coin >= slimeDivisionCost && slimeDivisionNum < 5)
         {
             coin -= slimeDivisionCost;
             slimeDivisionNum++;
