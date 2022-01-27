@@ -12,6 +12,8 @@ public class Slime : MonoBehaviour
     bool input;
     Vector2 touchPosition;
     public GameManager gameManager;
+    public AchieveManager achieveManager;
+    [SerializeField] GameObject slimeParticle;
 
     int moveDir;
     float speed;
@@ -28,6 +30,9 @@ public class Slime : MonoBehaviour
     [SerializeField]
     GameObject dna;
     TextMesh dnaT;
+    public TextMesh fusionT;
+    public GameObject fusionMessage;
+    int fusionCost;
 
     float t = 0;
     float startPosx;
@@ -46,6 +51,7 @@ public class Slime : MonoBehaviour
         touchCnt = 0;
         StartCoroutine(ProduceDelay());
         StartCoroutine(ChangeMove());
+        Instantiate(slimeParticle, transform.position, Quaternion.identity);
     }
 
   
@@ -58,20 +64,20 @@ public class Slime : MonoBehaviour
                 spr.sprite = sprites[0];
                 maxTouchCnt = 10;
                 earn = 1;
+                fusionCost = 1;
                 
-                //autoProduceTime = 2;
                 break;
             case 2:
                 spr.sprite = sprites[1];
                 maxTouchCnt = 20;
                 earn = 5;
-                //autoProduceTime = 1;
+                fusionCost = 2;
                 break;
             case 3:
                 spr.sprite = sprites[2];
                 maxTouchCnt = 30;
                 earn = 10;
-                //autoProduceTime = 0.5f;
+                fusionCost = 3;
                 break;
         }
     }
@@ -121,7 +127,7 @@ public class Slime : MonoBehaviour
 
         
 
-        if (a)
+        if (a) // »¶µÂ µÙ∑π¿Ã
         {
             t += Time.deltaTime;
             if (t >= 0.5f)
@@ -129,23 +135,40 @@ public class Slime : MonoBehaviour
         }
         
 
-        if (isBeingHeld)
+        if (isBeingHeld) // »¶µÂ Ω√
         {
             Vector2 mousePos;
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             gameObject.transform.position = new Vector2(mousePos.x - startPosx, mousePos.y - startPosY);
-            
+            fusionMessage.SetActive(true);
+            fusionT.text = fusionCost.ToString();
         }
+       
+            
 
         if (fusionEntity != null && fusionEntity.GetComponent<Slime>().slimeLevel == slimeLevel
-            && isBeingHeld == false)
+            && isBeingHeld == false) //«’√º
         {
-            //«’√º
-            Debug.Log("«’√º");
-            Destroy(fusionEntity);
-            slimeLevel += 1;
-            fusionEntity = null;
+            if (gameManager.DNA >= fusionCost)
+            {
+                Debug.Log("«’√º");
+                gameManager.DNA -= fusionCost;
+                Destroy(fusionEntity);
+                slimeLevel += 1;
+                fusionEntity = null;
+                Instantiate(slimeParticle, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+                if (!achieveManager.achieves[slimeLevel - 1])
+                    achieveManager.GetAchievement(slimeLevel);
+
+            }
+            else
+            {
+                fusionEntity = null;
+                gameManager.warning.SetActive(false);
+                gameManager.warning.SetActive(true);
+            }
+            
         }
         
 
@@ -242,8 +265,8 @@ public class Slime : MonoBehaviour
         isBeingHeld = false;
         a = false;
         t = 0;
-        
-        
+
+        fusionMessage.SetActive(false);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

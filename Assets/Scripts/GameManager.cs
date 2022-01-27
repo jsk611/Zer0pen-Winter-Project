@@ -14,7 +14,15 @@ public class GameManager : MonoBehaviour
     public Text[] texts;
     public Image slimeBtnDelay;
     public Text slimeAmountText;
+    public AchieveManager achieveManager;
+    public GameObject warning;
+    [SerializeField] GameObject warning2;
+    [SerializeField] GameObject moneyParticle;
+
+    [SerializeField] TextMesh fusionT;
+    [SerializeField] GameObject fusionMessage;
     bool isDelay;
+    int summonSlimeCost = 0;
     int _coin;
 
     float summonDelay;
@@ -23,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     float fillNum;
 
+    int cp = 20;
     public int coin
     {
         get { return _coin; }
@@ -104,13 +113,22 @@ public class GameManager : MonoBehaviour
 
     public void SummonSlime()
     {
-        if(!isDelay)
+        if (!isDelay && coin >= summonSlimeCost)
         {
             int m = GameObject.FindGameObjectsWithTag("Slime").Length;
-            if (m >= maxSlime) return;
+            if (m >= maxSlime)
+            {
+                warning2.SetActive(false);
+                warning2.SetActive(true);
+                return;
+            }
 
-            GameObject s = Instantiate(Slime, new Vector2(0, Random.Range(-3.5f, 0f)), transform.rotation);
-            s.GetComponent<Slime>().gameManager = this;
+            Slime s = Instantiate(Slime, new Vector2(0, Random.Range(-3.5f, 0f)), transform.rotation).GetComponent<Slime>();
+            s.gameManager = this;
+            s.achieveManager = achieveManager;
+            s.fusionMessage = fusionMessage;
+            s.fusionT = fusionT;
+            
             int a = Random.Range(2, 7);
 
             if (a <= slimeStartLevelNum)
@@ -118,10 +136,25 @@ public class GameManager : MonoBehaviour
             else
                 s.GetComponent<Slime>().slimeLevel = 1;
 
+            coin -= summonSlimeCost;
+            if (summonSlimeCost == 0)
+                summonSlimeCost = 10;
+            else
+                summonSlimeCost += cp;
+
+            texts[4].text = summonSlimeCost.ToString();
+
             isDelay = true;
             fillNum = 1;
+            if (!achieveManager.achieves[0])
+                achieveManager.GetAchievement(1);
             Invoke("SummonDelay", summonDelay);
 
+        }
+        else if(coin < summonSlimeCost && !isDelay)
+        {
+            warning.SetActive(false);
+            warning.SetActive(true);
         }
     }
     
@@ -225,7 +258,13 @@ public class GameManager : MonoBehaviour
         {
             coin -= slimeDivisionCost;
             slimeDivisionNum++;
+            Instantiate(moneyParticle);
             SetSlimeDivision();
+        }
+        else if(coin < slimeDivisionCost)
+        {
+            warning.SetActive(false);
+            warning.SetActive(true);
         }
     }
     public void UpgradeSummonSpeed()
@@ -234,7 +273,13 @@ public class GameManager : MonoBehaviour
         {
             coin -= summonSpeedCost;
             summonSpeedNum++;
+            Instantiate(moneyParticle);
             SetSummonSpeed();
+        }
+        else if (coin < summonSpeedCost)
+        {
+            warning.SetActive(false);
+            warning.SetActive(true);
         }
     }
     public void UpgradeMaxSlime()
@@ -243,7 +288,13 @@ public class GameManager : MonoBehaviour
         {
             coin -= maxSlimeCost;
             maxSlimeNum++;
+            Instantiate(moneyParticle);
             SetMaxSlime();
+        }
+        else if (coin < maxSlimeCost)
+        {
+            warning.SetActive(false);
+            warning.SetActive(true);
         }
     }
     public void UpgradeSlimeStartLevel()
@@ -252,7 +303,15 @@ public class GameManager : MonoBehaviour
         {
             coin -= slimeStartLevelCost;
             slimeStartLevelNum++;
+            summonSlimeCost += 1000;
+            cp += 100 * slimeStartLevelNum;
+            Instantiate(moneyParticle);
             SetSlimeStartLevel();
+        }
+        else if (coin < slimeStartLevelCost)
+        {
+            warning.SetActive(false);
+            warning.SetActive(true);
         }
     }
 
