@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5651141218598146459}
   - component: {fileID: 5651141218598146458}
   - component: {fileID: 5651141218598146452}
+  - component: {fileID: 32617654064181686}
   m_Layer: 6
   m_Name: slime1
   m_TagString: Slime
@@ -125,7 +126,7 @@ MonoBehaviour:
   coin: {fileID: 1015730173088397741, guid: 100c27d9d2ee0964b91765ca0a714feb, type: 3}
   dna: {fileID: 1015730173088397741, guid: c26bcaa8dc07b0349860da7f3c58f991, type: 3}
   fusionT: {fileID: 0}
-  fusionMessage: {fileID: 4947657647107298727, guid: d0081add69e7f174bb00dbcc01043720, type: 3}
+  fusionMessage: {fileID: 0}
   isBeingHeld: 0
   isInLine: 0
   fusionEntity: {fileID: 0}
@@ -150,3 +151,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!95 &32617654064181686
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5651141218598146463}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ea5e2d6621405dd46b1ff0ee616c6aac, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

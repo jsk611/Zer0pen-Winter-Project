@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     float fillNum;
 
-    int cp = 20;
+    int cp = 10;
     public int coin
     {
         get { return _coin; }
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.D))
         {
             coin += 100000;
-
+            DNA += 100;
         }
         int m = GameObject.FindGameObjectsWithTag("Slime").Length;
         slimeAmountText.text = m.ToString() + "/" + maxSlime.ToString();
@@ -129,12 +129,8 @@ public class GameManager : MonoBehaviour
             s.fusionMessage = fusionMessage;
             s.fusionT = fusionT;
             
-            int a = Random.Range(2, 7);
-
-            if (a <= slimeStartLevelNum)
-                s.GetComponent<Slime>().slimeLevel = 2;
-            else
-                s.GetComponent<Slime>().slimeLevel = 1;
+            
+            s.GetComponent<Slime>().slimeLevel = slimeStartLevelNum;
 
             coin -= summonSlimeCost;
             if (summonSlimeCost == 0)
@@ -303,8 +299,7 @@ public class GameManager : MonoBehaviour
         {
             coin -= slimeStartLevelCost;
             slimeStartLevelNum++;
-            summonSlimeCost += 1000;
-            cp += 100 * slimeStartLevelNum;
+           
             Instantiate(moneyParticle);
             SetSlimeStartLevel();
         }

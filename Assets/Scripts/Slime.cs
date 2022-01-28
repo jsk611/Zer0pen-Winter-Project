@@ -32,6 +32,7 @@ public class Slime : MonoBehaviour
     TextMesh dnaT;
     public TextMesh fusionT;
     public GameObject fusionMessage;
+    Animator anim;
     int fusionCost;
 
     float t = 0;
@@ -47,25 +48,27 @@ public class Slime : MonoBehaviour
 
     private void Start()
     {
-        
+        anim = GetComponent<Animator>();
         touchCnt = 0;
         StartCoroutine(ProduceDelay());
         StartCoroutine(ChangeMove());
         Instantiate(slimeParticle, transform.position, Quaternion.identity);
+        anim.SetTrigger("levelChange");
     }
 
   
 
     void SlimeShape(int level)
     {
-        switch(level)
+        
+        anim.SetInteger("slimeLevel", level);
+        switch (level)
         {
             case 1:
                 spr.sprite = sprites[0];
                 maxTouchCnt = 10;
                 earn = 1;
                 fusionCost = 1;
-                
                 break;
             case 2:
                 spr.sprite = sprites[1];
@@ -79,13 +82,51 @@ public class Slime : MonoBehaviour
                 earn = 10;
                 fusionCost = 3;
                 break;
+            case 4:
+                maxTouchCnt = 30;
+                earn = 15;
+                fusionCost = 4;
+                break;
+            case 5:
+                maxTouchCnt = 30;
+                earn = 30;
+                fusionCost = 5;
+                break;
+            case 6:
+                maxTouchCnt = 35;
+                earn = 50;
+                fusionCost = 6;
+                break;
+            case 7:
+                maxTouchCnt = 35;
+                earn = 100;
+                fusionCost = 7;
+                break;
+            case 8:
+                maxTouchCnt = 40;
+                earn = 180;
+                fusionCost = 8;
+                break;
+            case 9:
+                maxTouchCnt = 40;
+                earn = 260;
+                fusionCost = 9;
+                break;
         }
     }
     private void Update()
     {
+        //움직임 애니메이션
+        if(moveDir == 0)
+        {
+            anim.SetBool("isMoving", false);
+        }
+        else
+            anim.SetBool("isMoving", true);
+
         
         //슬라임 터치 시 골드 증가
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             touchPosition = Input.mousePosition;
             input = true;
@@ -161,6 +202,7 @@ public class Slime : MonoBehaviour
                 if (!achieveManager.achieves[slimeLevel - 1])
                     achieveManager.GetAchievement(slimeLevel);
 
+                anim.SetTrigger("levelChange");
             }
             else
             {
