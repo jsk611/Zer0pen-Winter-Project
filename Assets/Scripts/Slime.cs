@@ -68,49 +68,49 @@ public class Slime : MonoBehaviour
             case 1:
                 spr.sprite = sprites[0];
                 maxTouchCnt = 10;
-                earn = 3;
+                earn = (int)(3 * Mathf.Pow(1.5f, gameManager.slimeLvNum -1));
                 fusionCost = 1;
                 break;
             case 2:
                 spr.sprite = sprites[1];
                 maxTouchCnt = 20;
-                earn = 4;
+                earn = (int)(4 * Mathf.Pow(1.5f, gameManager.slimeLvNum -1));
                 fusionCost = 2;
                 break;
             case 3:
                 spr.sprite = sprites[2];
                 maxTouchCnt = 30;
-                earn = 6;
+                earn =(int)( 6 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 3;
                 break;
             case 4:
                 maxTouchCnt = 30;
-                earn = 7;
+                earn =(int)( 7 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 4;
                 break;
             case 5:
                 maxTouchCnt = 30;
-                earn = 10;
+                earn = (int)(10 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 5;
                 break;
             case 6:
                 maxTouchCnt = 35;
-                earn = 12;
+                earn = (int)(12 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 6;
                 break;
             case 7:
                 maxTouchCnt = 35;
-                earn = 14;
+                earn = (int)(14 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 7;
                 break;
             case 8:
                 maxTouchCnt = 40;
-                earn = 17;
+                earn = (int)(17 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 8;
                 break;
             case 9:
                 maxTouchCnt = 40;
-                earn = 19;
+                earn = (int)(19 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 9;
                 break;
         }

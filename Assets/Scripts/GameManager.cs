@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Text DNAText;
 
     public GameObject shopUI;
+    public GameObject upgradeUI;
     public GameObject Slime;
     public Text[] texts;
     public Image slimeBtnDelay;
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
     int maxSlimeCost;
     int slimeStartLevelNum;
     int slimeStartLevelCost;
+    public int slimeLvNum;
+    int slimeLvCost;
 
     // Start is called before the first frame update
     void Start()
@@ -72,9 +75,11 @@ public class GameManager : MonoBehaviour
         SetMaxSlime();
         slimeStartLevelNum = 1;
         SetSlimeStartLevel();
+        slimeLvNum = 1;
+        SetSlimeLevel();
 
-        
-    }
+
+}
 
     // Update is called once per frame
     void Update()
@@ -104,10 +109,26 @@ public class GameManager : MonoBehaviour
     {
         //다른 UI 비활성화 후 상점 UI 활성화
         if (shopUI.activeSelf == false)
+        {
+            upgradeUI.SetActive(false);
             shopUI.SetActive(true);
+        }
         else
         {
             shopUI.SetActive(false);
+        }
+    }
+    public void upgradeTrigger()
+    {
+        //다른 UI 비활성화 후 업그레이드 UI 활성화
+        if (upgradeUI.activeSelf == false)
+        {
+            shopUI.SetActive(false);
+            upgradeUI.SetActive(true);
+        }
+        else
+        {
+            upgradeUI.SetActive(false);
         }
     }
 
@@ -246,6 +267,13 @@ public class GameManager : MonoBehaviour
         texts[3].text = "생성 시작단계(Lv." + slimeStartLevelNum.ToString() + ")";
         texts[3].text += "\n" + slimeStartLevelCost.ToString() + "코인";
     }
+    void SetSlimeLevel()
+    {
+        slimeLvCost = (int)(500 * Mathf.Pow(2f,slimeLvNum - 1));
+
+        texts[5].text = "업그레이드(Lv." + slimeLvNum.ToString() + ")";
+        texts[5].text += "\n" + slimeLvCost.ToString() + "코인";
+    }
 
 
     public void UpgradeSlimeDivision()
@@ -310,5 +338,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+    public void UpgradeSlime()
+    {
+        if (coin >= slimeLvCost)
+        {
+            coin -= slimeLvCost;
+            slimeLvNum++;
+
+            Instantiate(moneyParticle);
+            SetSlimeLevel();
+        }
+        else if (coin < slimeLvCost)
+        {
+            warning.SetActive(false);
+            warning.SetActive(true);
+        }
+    }
 }
