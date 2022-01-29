@@ -6,16 +6,16 @@ using UnityEngine.EventSystems;
 public class Slime : MonoBehaviour
 {
     public int slimeLevel;
-    [SerializeField]
-    Sprite[] sprites;
+    [SerializeField] Sprite[] sprites;
 
     bool input;
-    Vector2 touchPosition;
+    Vector2 touchPos;
     public GameManager gameManager;
     public AchieveManager achieveManager;
     [SerializeField] GameObject slimeParticle;
 
-    int moveDir;
+    float moveDirX;
+    float moveDirY;
     float speed;
 
     int earn;
@@ -117,7 +117,7 @@ public class Slime : MonoBehaviour
     private void Update()
     {
         //움직임 애니메이션
-        if(moveDir == 0)
+        if(moveDirX == 0 && moveDirY == 0)
         {
             anim.SetBool("isMoving", false);
         }
@@ -128,7 +128,7 @@ public class Slime : MonoBehaviour
         //슬라임 터치 시 골드 증가
         if (Input.GetMouseButtonDown(0))
         {
-            touchPosition = Input.mousePosition;
+            touchPos = Input.mousePosition;
             input = true;
         }
         else
@@ -136,7 +136,7 @@ public class Slime : MonoBehaviour
 
         if (input && !overload)
         {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(touchPosition);
+            Vector2 pos = Camera.main.ScreenToWorldPoint(touchPos);
             Ray2D ray = new Ray2D(pos, Vector2.zero);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
             if(hit.collider != null && hit.collider.gameObject == gameObject) //슬라임을 클릭했을때
@@ -163,10 +163,6 @@ public class Slime : MonoBehaviour
             
             StartCoroutine(Delay());
         }
-
-
-
-        
 
         if (a) // 홀드 딜레이
         {
@@ -220,15 +216,21 @@ public class Slime : MonoBehaviour
     private void FixedUpdate() 
     {
         //슬라임 움직임
-        Vector2 direction = new Vector2(moveDir, 0);
+        Vector2 direction = new Vector2(moveDirX, moveDirY).normalized;
         transform.Translate(direction * speed * Time.deltaTime);
 
         Debug.DrawRay(transform.position, direction, Color.red);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, .5f,LayerMask.GetMask("Wall"));
-        if(hit.collider != null)
+        RaycastHit2D hitX = Physics2D.Raycast(transform.position, direction, .5f,LayerMask.GetMask("Wall"));
+        RaycastHit2D hitY = Physics2D.Raycast(transform.position, direction, .5f,LayerMask.GetMask("WallY"));
+        if(hitX.collider != null)
         {
             Debug.Log("벽에 부딪힘");
-            moveDir *= -1;
+            moveDirX *= -1;
+        }
+        if (hitY.collider != null)
+        {
+            Debug.Log("벽에 부딪힘");
+            moveDirY *= -1;
         }
     }
 
@@ -236,7 +238,10 @@ public class Slime : MonoBehaviour
     {
         while(true)
         {
-            moveDir = Random.Range(-1, 2);
+            float x = Random.Range(-1f, 1f);
+            float y = Random.Range(-1f, 1f);
+            moveDirX = Mathf.Abs(x) < 0.3f ? 0 : x;
+            moveDirY = Mathf.Abs(y)<0.3f? 0 : y;
             speed = Random.Range(0.5f, 1.5f);
             float m = Random.Range(1.5f, 3.5f);
             yield return new WaitForSeconds(m);

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Slime
   - Wall
+  - WallY
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - UI
   - Slime
   - Wall
-  - 
+  - WallY
   - 
   - 
   - 
