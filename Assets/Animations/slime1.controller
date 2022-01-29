@@ -143,7 +143,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: idle3
-  m_Speed: 0.25
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6199892040145560438}
@@ -170,7 +170,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: idle9
-  m_Speed: 0.25
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -1176316448380391063}
@@ -380,7 +380,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: idle8
-  m_Speed: 0.25
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4710654460836439808}
@@ -407,7 +407,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: move1
-  m_Speed: 1
+  m_Speed: 0.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7555068704358407908}
@@ -619,7 +619,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: idle1
-  m_Speed: 0.25
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4149441531267824825}
@@ -671,7 +671,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: idle5
-  m_Speed: 0.25
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1792289451328242624}
@@ -892,7 +892,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: idle4
-  m_Speed: 0.25
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -7179743669643511684}
@@ -988,7 +988,7 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 260, y: -460, z: 0}
+  m_AnyStatePosition: {x: 440, y: -440, z: 0}
   m_EntryPosition: {x: -230, y: -660, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
@@ -1156,7 +1156,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: idle6
-  m_Speed: 0.25
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2065960019274653532}
@@ -1315,7 +1315,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: idle7
-  m_Speed: 0.25
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2301707484445246069}
@@ -1499,7 +1499,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: idle2
-  m_Speed: 0.25
+  m_Speed: 0.125
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -1633235374069715476}

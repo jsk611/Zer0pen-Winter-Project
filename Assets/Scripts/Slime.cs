@@ -41,6 +41,7 @@ public class Slime : MonoBehaviour
     [SerializeField]
     bool isBeingHeld = false;
     bool a;
+    bool isCoroutineWork;
     public bool isInLine;
     float timelinePosY;
     [SerializeField]
@@ -67,49 +68,49 @@ public class Slime : MonoBehaviour
             case 1:
                 spr.sprite = sprites[0];
                 maxTouchCnt = 10;
-                earn = 1;
+                earn = 3;
                 fusionCost = 1;
                 break;
             case 2:
                 spr.sprite = sprites[1];
                 maxTouchCnt = 20;
-                earn = 5;
+                earn = 4;
                 fusionCost = 2;
                 break;
             case 3:
                 spr.sprite = sprites[2];
                 maxTouchCnt = 30;
-                earn = 10;
+                earn = 6;
                 fusionCost = 3;
                 break;
             case 4:
                 maxTouchCnt = 30;
-                earn = 15;
+                earn = 7;
                 fusionCost = 4;
                 break;
             case 5:
                 maxTouchCnt = 30;
-                earn = 30;
+                earn = 10;
                 fusionCost = 5;
                 break;
             case 6:
                 maxTouchCnt = 35;
-                earn = 50;
+                earn = 12;
                 fusionCost = 6;
                 break;
             case 7:
                 maxTouchCnt = 35;
-                earn = 100;
+                earn = 14;
                 fusionCost = 7;
                 break;
             case 8:
                 maxTouchCnt = 40;
-                earn = 180;
+                earn = 17;
                 fusionCost = 8;
                 break;
             case 9:
                 maxTouchCnt = 40;
-                earn = 260;
+                earn = 19;
                 fusionCost = 9;
                 break;
         }
@@ -126,23 +127,12 @@ public class Slime : MonoBehaviour
 
         
         //슬라임 터치 시 골드 증가
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !overload)
         {
-            touchPos = Input.mousePosition;
-            input = true;
-        }
-        else
-            input = false;
-
-        if (input && !overload)
-        {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(touchPos);
-            Ray2D ray = new Ray2D(pos, Vector2.zero);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-            if(hit.collider != null && hit.collider.gameObject == gameObject) //슬라임을 클릭했을때
+            if(!EventSystem.current.IsPointerOverGameObject())
             {
                 int rn = Random.Range(1, 101);
-                if(rn == 1)
+                if (rn == 1)
                 {
                     //DNA 추가
                     gameManager.DNA++;
@@ -156,13 +146,24 @@ public class Slime : MonoBehaviour
 
                 }
             }
+            
         }
+        
         if(touchCnt >= maxTouchCnt && !overload)
         {
             overload = true;
-            
             StartCoroutine(Delay());
         }
+
+        if(overload)
+        {
+            spr.color = new Color(0.3f, 0.3f, 0.3f);
+        }
+        else
+        {
+            spr.color = new Color(1, 1, 1);
+        }
+
 
         if (a) // 홀드 딜레이
         {
@@ -252,10 +253,12 @@ public class Slime : MonoBehaviour
 
     IEnumerator Delay() //슬라임 생산 과부하
     {
-        spr.color = new Color(0.3f, 0.3f, 0.3f);
+        isCoroutineWork = true;
+        //spr.color = new Color(0.3f, 0.3f, 0.3f);
         yield return new WaitForSeconds(5);
         touchCnt = 0;
-        spr.color = new Color(1f, 1f, 1f);
+        //spr.color = new Color(1f, 1f, 1f);
+        isCoroutineWork = false;
         overload = false;
     }
 
@@ -324,6 +327,12 @@ public class Slime : MonoBehaviour
             SpriteRenderer spriteRenderer = collision.GetComponent<SpriteRenderer>();
             spriteRenderer.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.3f);
         }
+
+        if (collision.gameObject.tag == "WetArea" && !isCoroutineWork)
+        {
+            overload = true;
+            StartCoroutine(Delay());
+        }
         
     }
 
@@ -335,6 +344,7 @@ public class Slime : MonoBehaviour
             spriteRenderer.color = new Color(spr.color.r, spr.color.g, spr.color.b, 1f);
             fusionEntity = null;
         }
+        
     }
 
     
