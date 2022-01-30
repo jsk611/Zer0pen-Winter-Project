@@ -8,6 +8,7 @@ public class Event : MonoBehaviour
     [SerializeField] GameObject laser;
     [SerializeField] GameObject rain;
     [SerializeField] GameObject wetArea;
+    [SerializeField] GameObject Fog;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +19,7 @@ public class Event : MonoBehaviour
     void TriggerEvent()
     {
         int rand = Random.Range(0,6);
+        int r2 = Random.Range(0, 3);
         switch(rand)
         {
             case 0:
@@ -33,10 +35,14 @@ public class Event : MonoBehaviour
             default:
                 break;
         }
+        if (r2 == 1)
+            Instantiate(Fog);
+        
     }
 
     IEnumerator HunterEvent()
     {
+        yield return new WaitForSeconds(2f);
         for(int i=0; i<Random.Range(2,6); i++)
         {
             int rand = Random.Range(0, 2);
@@ -52,9 +58,9 @@ public class Event : MonoBehaviour
     IEnumerator Rain()
     {
         GameObject r = Instantiate(rain);
-        Destroy(r, 21f);
+        Destroy(r, 23f);
         yield return new WaitForSeconds(2f);
-        for (int i = 0; i < Random.Range(2, 5); i++)
+        for (int i = 0; i < Random.Range(1, 5); i++)
         {
             Instantiate(wetArea,new Vector2(Random.Range(-2.5f,2.5f),Random.Range(-2.5f, 2.5f)), Quaternion.identity);
             yield return new WaitForSeconds(1f);

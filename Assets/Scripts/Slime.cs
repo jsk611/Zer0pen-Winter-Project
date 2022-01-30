@@ -155,15 +155,9 @@ public class Slime : MonoBehaviour
             StartCoroutine(Delay());
         }
 
-        if(overload)
-        {
-            spr.color = new Color(0.3f, 0.3f, 0.3f);
-        }
-        else
-        {
-            spr.color = new Color(1, 1, 1);
-        }
-
+        
+        if(!isCoroutineWork && spr.color.r <= 0.4f)
+            spr.color = new Color(1f, 1f, 1f);
 
         if (a) // 홀드 딜레이
         {
@@ -254,10 +248,10 @@ public class Slime : MonoBehaviour
     IEnumerator Delay() //슬라임 생산 과부하
     {
         isCoroutineWork = true;
-        //spr.color = new Color(0.3f, 0.3f, 0.3f);
+        spr.color = new Color(0.3f, 0.3f, 0.3f);
         yield return new WaitForSeconds(5);
         touchCnt = 0;
-        //spr.color = new Color(1f, 1f, 1f);
+        spr.color = new Color(1f, 1f, 1f);
         isCoroutineWork = false;
         overload = false;
     }

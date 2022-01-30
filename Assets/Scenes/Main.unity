@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 20f1f79069b6574488a053673bd1b4fa, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -3837,6 +3837,7 @@ MonoBehaviour:
   laser: {fileID: 3319564471593810949, guid: e46907ec56a0c174d8a04d39a2efd492, type: 3}
   rain: {fileID: 3546362483385607710, guid: 75a951dfb56313a47b665b569f9a8659, type: 3}
   wetArea: {fileID: 5070765016670378082, guid: cbd5136c7ca5cc742a2e22924eb271f5, type: 3}
+  Fog: {fileID: 2503139976802626187, guid: 589bf9aaa3c38e346940c2423e2fb143, type: 3}
 --- !u!4 &1564173376
 Transform:
   m_ObjectHideFlags: 0
