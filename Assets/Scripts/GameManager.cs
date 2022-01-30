@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject shopUI;
     public GameObject upgradeUI;
+    public GameObject optionUI;
     public GameObject Slime;
     public Text[] texts;
     public Image slimeBtnDelay;
@@ -107,6 +108,7 @@ public class GameManager : MonoBehaviour
         if (shopUI.activeSelf == false)
         {
             upgradeUI.SetActive(false);
+            optionUI.SetActive(false);
             shopUI.SetActive(true);
         }
         else
@@ -120,11 +122,26 @@ public class GameManager : MonoBehaviour
         if (upgradeUI.activeSelf == false)
         {
             shopUI.SetActive(false);
+            optionUI.SetActive(false);
             upgradeUI.SetActive(true);
         }
         else
         {
             upgradeUI.SetActive(false);
+        }
+    }
+    public void optionTrigger()
+    {
+        //다른 UI 비활성화 후 업그레이드 UI 활성화
+        if (optionUI.activeSelf == false)
+        {
+            shopUI.SetActive(false);
+            upgradeUI.SetActive(false);
+            optionUI.SetActive(true);
+        }
+        else
+        {
+            optionUI.SetActive(false);
         }
     }
 
