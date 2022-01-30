@@ -191,6 +191,10 @@ public class Slime : MonoBehaviour
             if (gameManager.DNA >= fusionCost)
             {
                 Debug.Log("합체");
+                if(slimeLevel == 15)
+                {
+                    //엔딩
+                }
                 gameManager.DNA -= fusionCost;
                 Destroy(fusionEntity);
                 slimeLevel += 1;
