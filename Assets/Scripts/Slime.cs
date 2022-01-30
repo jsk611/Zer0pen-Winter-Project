@@ -19,9 +19,7 @@ public class Slime : MonoBehaviour
     float speed;
 
     int earn;
-    int maxTouchCnt = 10;
     bool overload;
-    int touchCnt;
     public SpriteRenderer spr;
 
     [SerializeField]
@@ -43,14 +41,13 @@ public class Slime : MonoBehaviour
     bool a;
     bool isCoroutineWork;
     public bool isInLine;
-    float timelinePosY;
+
     [SerializeField]
     GameObject fusionEntity;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
-        touchCnt = 0;
         StartCoroutine(ProduceDelay());
         StartCoroutine(ChangeMove());
         Instantiate(slimeParticle, transform.position, Quaternion.identity);
@@ -67,50 +64,65 @@ public class Slime : MonoBehaviour
         {
             case 1:
                 spr.sprite = sprites[0];
-                maxTouchCnt = 10;
                 earn = (int)(3 * Mathf.Pow(1.5f, gameManager.slimeLvNum -1));
                 fusionCost = 1;
                 break;
             case 2:
                 spr.sprite = sprites[1];
-                maxTouchCnt = 20;
                 earn = (int)(4 * Mathf.Pow(1.5f, gameManager.slimeLvNum -1));
                 fusionCost = 2;
                 break;
             case 3:
                 spr.sprite = sprites[2];
-                maxTouchCnt = 30;
                 earn =(int)( 6 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 3;
                 break;
             case 4:
-                maxTouchCnt = 30;
                 earn =(int)( 7 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 4;
                 break;
             case 5:
-                maxTouchCnt = 30;
                 earn = (int)(10 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 5;
                 break;
             case 6:
-                maxTouchCnt = 35;
                 earn = (int)(12 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 6;
                 break;
             case 7:
-                maxTouchCnt = 35;
                 earn = (int)(14 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 7;
                 break;
             case 8:
-                maxTouchCnt = 40;
                 earn = (int)(17 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 8;
                 break;
             case 9:
-                maxTouchCnt = 40;
                 earn = (int)(19 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
+                fusionCost = 9;
+                break;
+            case 10:
+                earn = (int)(21 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
+                fusionCost = 9;
+                break;
+            case 11:
+                earn = (int)(23 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
+                fusionCost = 9;
+                break;
+            case 12:
+                earn = (int)(25 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
+                fusionCost = 9;
+                break;
+            case 13:
+                earn = (int)(27 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
+                fusionCost = 9;
+                break;
+            case 14:
+                earn = (int)(29 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
+                fusionCost = 9;
+                break;
+            case 15:
+                earn = (int)(31 * Mathf.Pow(1.5f, gameManager.slimeLvNum - 1));
                 fusionCost = 9;
                 break;
         }
@@ -142,18 +154,12 @@ public class Slime : MonoBehaviour
                 {
                     EarningEffect(0, earn);
                     gameManager.coin += earn;
-                    touchCnt++;
-
                 }
             }
             
         }
         
-        if(touchCnt >= maxTouchCnt && !overload)
-        {
-            overload = true;
-            StartCoroutine(Delay());
-        }
+
 
         
         if(!isCoroutineWork && spr.color.r <= 0.4f)
@@ -190,7 +196,7 @@ public class Slime : MonoBehaviour
                 slimeLevel += 1;
                 fusionEntity = null;
                 Instantiate(slimeParticle, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-                if (!achieveManager.achieves[slimeLevel - 1])
+                if (!achieveManager.achieves[slimeLevel -1])
                     achieveManager.GetAchievement(slimeLevel);
 
                 anim.SetTrigger("levelChange");
@@ -250,7 +256,6 @@ public class Slime : MonoBehaviour
         isCoroutineWork = true;
         spr.color = new Color(0.3f, 0.3f, 0.3f);
         yield return new WaitForSeconds(5);
-        touchCnt = 0;
         spr.color = new Color(1f, 1f, 1f);
         isCoroutineWork = false;
         overload = false;

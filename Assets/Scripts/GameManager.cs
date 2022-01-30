@@ -20,10 +20,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject warning2;
     [SerializeField] GameObject moneyParticle;
 
-    [SerializeField] TextMesh fusionT;
-    [SerializeField] GameObject fusionMessage;
+    public TextMesh fusionT;
+    public GameObject fusionMessage;
+    [SerializeField] SpriteRenderer background;
+    [SerializeField] Sprite[] backs;
     bool isDelay;
-    int summonSlimeCost = 0;
+    public int summonSlimeCost = 0;
     int _coin;
 
     float summonDelay;
@@ -47,13 +49,12 @@ public class GameManager : MonoBehaviour
 
     public float autoProduceTime;
 
-    int slimeDivisionNum;
-    int slimeDivisionCost;
-    int summonSpeedNum;
+    public int isBackChange;
+    public int summonSpeedNum;
     int summonSpeedCost;
-    int maxSlimeNum;
+    public int maxSlimeNum;
     int maxSlimeCost;
-    int slimeStartLevelNum;
+    public int slimeStartLevelNum;
     int slimeStartLevelCost;
     public int slimeLvNum;
     int slimeLvCost;
@@ -61,23 +62,16 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _coin = 0;
-        _DNA = 0;
         autoProduceTime = 50f;
         fillNum = 0;
-        maxSlime = 5;
-        //1단계 레벨/가격
-        slimeDivisionNum = 1;
-        SetSlimeDivision();
-        summonSpeedNum = 1;
-        SetSummonSpeed();
-        maxSlimeNum = 1;
-        SetMaxSlime();
-        slimeStartLevelNum = 1;
-        SetSlimeStartLevel();
-        slimeLvNum = 1;
-        SetSlimeLevel();
 
+        //1단계 레벨/가격
+
+        SetBackground();
+        SetSummonSpeed();
+        SetMaxSlime();
+        SetSlimeStartLevel();
+        SetSlimeLevel();
 
 }
 
@@ -97,8 +91,10 @@ public class GameManager : MonoBehaviour
       
         if(Input.GetKeyDown(KeyCode.D))
         {
-            coin += 100000;
+            coin += 10000000;
             DNA += 100;
+            summonDelay = 0.1f;
+            maxSlime = 100;
         }
         int m = GameObject.FindGameObjectsWithTag("Slime").Length;
         slimeAmountText.text = m.ToString() + "/" + maxSlime.ToString();
@@ -180,53 +176,33 @@ public class GameManager : MonoBehaviour
         isDelay = false;
     }
 
-    void SetSlimeDivision()
+    void SetBackground()
     {
-        switch (slimeDivisionNum)
+        background.sprite = backs[isBackChange];
+        
+        if(isBackChange == 1)
         {
-            case 1:
-                autoProduceTime = 50f;
-                slimeDivisionCost = 100;
-                break;
-            case 2:
-                autoProduceTime = 45f;
-                slimeDivisionCost = 1000;
-                break;
-            case 3:
-                autoProduceTime = 40f;
-                slimeDivisionCost = 10000;
-                break;
-            case 4:
-                autoProduceTime = 35f;
-                slimeDivisionCost = 20000;
-                break;
-            case 5:
-                autoProduceTime = 30f;
-                break;
-
-        }
-        if(slimeDivisionNum == 5)
-        {
-            texts[0].text = "분열속도(Lv.Max)";
+            texts[0].text = "연구소로 업그레이드(엔딩 조건)(o)";
+            background.color = new Color(1, 1, 1, 0.35f);
         }
         else
         {
-            texts[0].text = "분열속도(Lv." + slimeDivisionNum.ToString() + ")";
-            texts[0].text += "\n" + slimeDivisionCost.ToString() + "코인";
+            texts[0].text = "연구소로 업그레이드(엔딩 조건)(x)";
+            texts[0].text += "\n10000000코인";
 
         }
     }
     void SetSummonSpeed()
     {
-        summonSpeedCost = (int)(10000 * Mathf.Pow(1.2f, summonSpeedNum - 1));
-        summonDelay = 10 - 0.2f * (summonSpeedNum - 1);
-        if(summonSpeedNum == 35)
+        summonSpeedCost = (int)(10000 * Mathf.Pow(1.8f, summonSpeedNum - 1));
+        summonDelay = 10 - 0.4f * (summonSpeedNum - 1);
+        if(summonSpeedNum == 20)
         {
-            texts[1].text = "슬라임 생성속도(Lv.Max)";
+            texts[1].text = "슬라임 생성기 스피드(Lv.Max)";
         }
         else
         {
-            texts[1].text = "슬라임 생성속도(Lv." + summonSpeedNum.ToString() + ")";
+            texts[1].text = "슬라임 생성기 스피드(Lv." + summonSpeedNum.ToString() + ")";
             texts[1].text += "\n" + summonSpeedCost.ToString() + "코인";
 
         }
@@ -236,7 +212,7 @@ public class GameManager : MonoBehaviour
         maxSlime = 5 + (maxSlimeNum - 1);
         maxSlimeCost = (int)(10000 * Mathf.Pow(1.8f,maxSlimeNum -1));
 
-        texts[2].text = "수용량(Lv." + maxSlimeNum.ToString() + ")";
+        texts[2].text = "슬라임 농장 규모(Lv." + maxSlimeNum.ToString() + ")";
         texts[2].text += "\n" + maxSlimeCost.ToString() + "코인";
     }
     void SetSlimeStartLevel()
@@ -246,11 +222,11 @@ public class GameManager : MonoBehaviour
 
         if(slimeStartLevelNum == 5)
         {
-            texts[3].text = "생성 시작단계(Lv.Max)";
+            texts[3].text = "슬라임 생성기 버전(Lv.Max)";
         }
         else
         {
-            texts[3].text = "생성 시작단계(Lv." + slimeStartLevelNum.ToString() + ")";
+            texts[3].text = "슬라임 생성기 버전(Lv." + slimeStartLevelNum.ToString() + ")";
             texts[3].text += "\n" + slimeStartLevelCost.ToString() + "코인";
         }
 
@@ -260,21 +236,21 @@ public class GameManager : MonoBehaviour
     {
         slimeLvCost = (int)(500 * Mathf.Pow(2f,slimeLvNum - 1));
 
-        texts[5].text = "업그레이드(Lv." + slimeLvNum.ToString() + ")";
+        texts[5].text = "슬라임 품질 개선(Lv." + slimeLvNum.ToString() + ")";
         texts[5].text += "\n" + slimeLvCost.ToString() + "코인";
     }
 
 
-    public void UpgradeSlimeDivision()
+    public void UpgradeBack()
     {
-        if(coin >= slimeDivisionCost && slimeDivisionNum < 5)
+        if(coin >= 10000000 && isBackChange == 0)
         {
-            coin -= slimeDivisionCost;
-            slimeDivisionNum++;
+            coin -= 10000000;
             Instantiate(moneyParticle);
-            SetSlimeDivision();
+            isBackChange = 1;
+            SetBackground();
         }
-        else if(coin < slimeDivisionCost)
+        else if(coin < 10000000)
         {
             warning.SetActive(false);
             warning.SetActive(true);
@@ -282,7 +258,7 @@ public class GameManager : MonoBehaviour
     }
     public void UpgradeSummonSpeed()
     {
-        if (coin >= summonSpeedCost && summonSpeedNum < 35)
+        if (coin >= summonSpeedCost && summonSpeedNum < 15)
         {
             coin -= summonSpeedCost;
             summonSpeedNum++;

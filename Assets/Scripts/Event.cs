@@ -8,7 +8,7 @@ public class Event : MonoBehaviour
     [SerializeField] GameObject laser;
     [SerializeField] GameObject rain;
     [SerializeField] GameObject wetArea;
-    [SerializeField] GameObject Fog;
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +35,7 @@ public class Event : MonoBehaviour
             default:
                 break;
         }
-        if (r2 == 1)
-            Instantiate(Fog);
+
         
     }
 
