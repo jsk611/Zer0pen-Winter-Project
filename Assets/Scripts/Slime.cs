@@ -131,8 +131,8 @@ public class Slime : MonoBehaviour
         {
             if(!EventSystem.current.IsPointerOverGameObject())
             {
-                int rn = Random.Range(1, 101);
-                if (rn == 1)
+                int rn = Random.Range(1, 1001);
+                if (rn <= gameManager.slimeLvNum)
                 {
                     //DNA Ãß°¡
                     gameManager.DNA++;
@@ -294,7 +294,7 @@ public class Slime : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             
-            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, .5f);
+            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
             Vector3 mousePos;
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -325,7 +325,7 @@ public class Slime : MonoBehaviour
         {
             fusionEntity = collision.gameObject;
             SpriteRenderer spriteRenderer = collision.GetComponent<SpriteRenderer>();
-            spriteRenderer.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.3f);
+            spriteRenderer.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
         }
 
         if (collision.gameObject.tag == "WetArea" && !isCoroutineWork)

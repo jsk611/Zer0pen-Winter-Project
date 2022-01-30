@@ -12,12 +12,12 @@ public class Event : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("TriggerEvent", 10f, 30f);
+        InvokeRepeating("TriggerEvent", 30f, 50f);
     }
 
     void TriggerEvent()
     {
-        int rand = Random.Range(0,3);
+        int rand = Random.Range(0,6);
         switch(rand)
         {
             case 0:
@@ -25,6 +25,10 @@ public class Event : MonoBehaviour
                 break;
             case 1:
                 StartCoroutine(Rain());
+                break;
+            case 2:
+                StartCoroutine(Rain());
+                StartCoroutine(HunterEvent());
                 break;
             default:
                 break;
