@@ -74,8 +74,8 @@ public class GameManager : MonoBehaviour
         SetMaxSlime();
         SetSlimeStartLevel();
         SetSlimeLevel();
-
-}
+        texts[4].text = summonSlimeCost.ToString();
+    }
 
     // Update is called once per frame
     void Update()

@@ -145,7 +145,7 @@ public class Slime : MonoBehaviour
             if(!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
             {
                 earningAudio.Play();
-                int rn = Random.Range(1, 1001);
+                int rn = Random.Range(1, 10001);
                 if (rn <= gameManager.slimeLvNum)
                 {
                     //DNA Ãß°¡
