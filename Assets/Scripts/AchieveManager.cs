@@ -10,6 +10,7 @@ public class AchieveManager : MonoBehaviour
         "È£¶± ", "ºØ¾î»§ ", "¾î¹¬ ", "ÄðÇÇ½º ", "½ºÆÔ ", "ºÎ´ëÂî°³ ", "ÇÇÀÚ ", "ÇÜ¹ö°Å ", "Ä¡Å² " };
     [SerializeField] GameObject achieveUI;
 
+
     private void Awake()
     {
         
@@ -19,6 +20,7 @@ public class AchieveManager : MonoBehaviour
 public void GetAchievement(int level)
     {
         achieves[level - 1] = true;
+        achieveUI.SetActive(false);
         achieveUI.SetActive(true);
         Text t = achieveUI.GetComponentInChildren<Text>();
         for(int i=0; i<messages.Length;i++)
@@ -29,6 +31,7 @@ public void GetAchievement(int level)
             }
         }
         Invoke("SetActiveF", 2.5f);
+
     }
 
     void SetActiveF()

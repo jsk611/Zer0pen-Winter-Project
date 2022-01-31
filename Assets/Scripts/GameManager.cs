@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
     public int slimeLvNum;
     int slimeLvCost;
 
+    [SerializeField] GameObject ending;
     // Start is called before the first frame update
     void Start()
     {
@@ -338,5 +339,13 @@ public class GameManager : MonoBehaviour
             warning.SetActive(false);
             warning.SetActive(true);
         }
+    }
+
+    public void Ending()
+    {
+        ending.SetActive(true);
+        optionUI.SetActive(false);
+        shopUI.SetActive(false);
+        upgradeUI.SetActive(false);
     }
 }

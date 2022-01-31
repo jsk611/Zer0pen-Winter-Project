@@ -45,6 +45,7 @@ public class Slime : MonoBehaviour
     [SerializeField]
     GameObject fusionEntity;
 
+    [SerializeField] AudioSource earningAudio;
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -141,8 +142,9 @@ public class Slime : MonoBehaviour
         //슬라임 터치 시 골드 증가
         if (Input.GetMouseButtonDown(0) && !overload)
         {
-            if(!EventSystem.current.IsPointerOverGameObject())
+            if(!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
             {
+                earningAudio.Play();
                 int rn = Random.Range(1, 1001);
                 if (rn <= gameManager.slimeLvNum)
                 {
@@ -191,10 +193,16 @@ public class Slime : MonoBehaviour
             if (gameManager.DNA >= fusionCost)
             {
                 Debug.Log("합체");
-                if(slimeLevel == 15)
+
+                if (slimeLevel == 15 && gameManager.isBackChange == 1)
                 {
                     //엔딩
+                    gameManager.Ending();
+                    return;
                 }
+                else if (slimeLevel == 15)
+                    return;
+
                 gameManager.DNA -= fusionCost;
                 Destroy(fusionEntity);
                 slimeLevel += 1;
